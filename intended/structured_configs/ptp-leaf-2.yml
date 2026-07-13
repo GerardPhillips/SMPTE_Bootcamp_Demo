@@ -16,6 +16,7 @@ daemon_terminattr:
   cvvrf: default
   disable_aaa: false
   smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  sflowaddr: default/127.0.0.1:6343
 enable_password:
   disabled: true
 ethernet_interfaces:
@@ -134,6 +135,9 @@ ethernet_interfaces:
 event_monitor:
   enabled: true
 hostname: ptp-leaf-2
+ip_domain_lookup:
+  source_interfaces:
+  - name: Management1
 ip_igmp_snooping:
   globally_enabled: true
 ip_name_server:

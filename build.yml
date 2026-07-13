@@ -2,20 +2,17 @@
 - name: Build AVD fabric configs
   hosts: FABRIC
   gather_facts: false
-  collections:
-    - arista.avd
-    - arista.cvp
   tasks:
 
     - name: Reset local folders for output
       tags: [build, generate]
-      import_role:
+      ansible.builtin.import_role:
         name: arista.avd.build_output_folders
 
     - name: Generate intended variables
-      import_role:
+      ansible.builtin.import_role:
         name: arista.avd.eos_designs
 
     - name: Generate device intended config and documentation
-      import_role:
+      ansible.builtin.import_role:
         name: arista.avd.eos_cli_config_gen

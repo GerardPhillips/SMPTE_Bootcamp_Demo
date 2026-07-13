@@ -85,11 +85,9 @@ cv_settings:
         - name: 192.168.0.5
       token_file: /tmp/token
 
-custom_structured_configuration_ip_name_server:
-  vrfs:
-    - name: default
-      servers:
-        - ip_address: 169.254.169.254
+dns_settings:
+  servers:
+    - ip_address: 169.254.169.254
 
 custom_structured_configuration_event_monitor:
   enabled: true
@@ -150,5 +148,5 @@ custom_node_type_keys:
 
 # sFlow for CVP flow tracking
 sflow_settings:
-  destinations:
-    - destination: 127.0.0.1
+  export_to_cloudvision:
+    enabled: true

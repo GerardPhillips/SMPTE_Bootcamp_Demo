@@ -11,6 +11,7 @@
     cv_submit_workspace: true
     cv_submit_workspace_force: false
     cv_configlet_name_template: "AVD-${hostname}"
+    # External CVP address for Ansible deploy (switches use internal 192.168.0.5 via cv_settings in FABRIC.yml)
     cv_server: 10.18.129.180
     cv_token: "{{ lookup('ansible.builtin.file', 'cvaas_user_token') }}"
     cv_verify_certs: false
