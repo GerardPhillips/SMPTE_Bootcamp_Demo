@@ -113,7 +113,7 @@ Pure L2/L3 design with overlay_routing_protocol: none. Custom node types disable
 
 ### Critical
 
-1. **PTP Clock Identity Collision** — Red and Blue fabrics generate identical PTP clock identities (same node type + same IDs). Since PTP leafs bridge both fabrics, BMCA cannot distinguish clocks. Fix: override clock-identity per node or use different IDs across fabrics.
+1. ~~**PTP Clock Identity Collision**~~ **RESOLVED** — Blue fabric nodes now have unique clock identities (byte 4: 00=Red, 01=Blue) via structured_config overrides.
 
 2. **Plaintext Credentials in Inventory** — `ansible_password: arista123!` is in `inventory.yml` in cleartext. Should use Ansible Vault or environment variables before any public push.
 
@@ -159,9 +159,15 @@ Pure L2/L3 design with overlay_routing_protocol: none. Custom node types disable
 
 22. **PTP VLAN Gateway Redundancy** — VLAN 2222 has two SVI IPs but no VRRP/VARP. GMs lose connectivity if their specific PTP leaf fails.
 
-23. **sFlow Not Generating** — `sflow_settings` defined but no sFlow config appears in output. May need additional parameters or use `custom_structured_configuration_sflow`.
+23. ~~**sFlow Not Generating**~~ **RESOLVED** — Now uses `sflow_settings.export_to_cloudvision.enabled: true`, auto-configured via TerminAttr.
 
-24. **`build.yml` Deprecated `collections` Keyword** — The play-level `collections:` block is deprecated in ansible-core 2.16+. Roles are already FQCN-referenced, so remove it.
+24. ~~**`build.yml` Deprecated `collections` Keyword**~~ **RESOLVED** — Removed `collections:` block, tasks now use FQCNs exclusively.
+
+### Anti-Patterns Resolved (from AVD schema compliance review)
+- DNS config now uses native `dns_settings` instead of `custom_structured_configuration_ip_name_server`
+- sFlow now uses `sflow_settings.export_to_cloudvision` instead of hardcoded 127.0.0.1 destination
+- `build.yml` uses FQCNs exclusively, deprecated `collections:` block removed
+- `deploy.yml` documents external vs internal CVP address difference
 
 ### Nice-to-Have
 
