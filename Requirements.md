@@ -109,5 +109,69 @@ Pure L2/L3 design with overlay_routing_protocol: none. Custom node types disable
 ### Toolchain (already installed)
 - ansible-core 2.16.3, arista.avd 6.2.0, arista.cvp 3.10.1, Python 3.10.4
 
+## Improvements
+
+### Critical
+
+1. **PTP Clock Identity Collision** — Red and Blue fabrics generate identical PTP clock identities (same node type + same IDs). Since PTP leafs bridge both fabrics, BMCA cannot distinguish clocks. Fix: override clock-identity per node or use different IDs across fabrics.
+
+2. **Plaintext Credentials in Inventory** — `ansible_password: arista123!` is in `inventory.yml` in cleartext. Should use Ansible Vault or environment variables before any public push.
+
+3. **HTTP Enabled on eAPI** — `enable_http: true` in FABRIC.yml allows unencrypted management access. Set to `false` for production.
+
+4. **PTP Leafs Missing PIM RP** — ptp-leaf-1/2 have PIM sparse-mode on uplinks but no RP address configured. Multicast traversing the PTP tier will fail. Add RP config to PTP.yml.
+
+5. **Overlapping IP Pools (Latent)** — Red P2P pool (10.0.0.128/26) overlaps with PTP P2P pool (10.0.0.160/27). No collision today with 3 leafs, but scaling Red beyond ~16 leafs would conflict. Shrink Red pool to /27.
+
+### Recommended
+
+6. **BFD on BGP Peers** — No BFD configured; BGP failover takes up to 180s. ST2110 needs sub-second convergence. Add `bfd: true` to BGP peer groups.
+
+7. **Jumbo MTU on Host Ports** — Routed port (Eth1) and switchport (Eth2) on leafs have no MTU set (defaults to 1500). ST2110 video requires jumbo frames (9214).
+
+8. **Management VRF Separation** — Management is in VRF `default`, sharing the data plane. Use a dedicated `MGMT` VRF for management plane isolation.
+
+9. **BGP Route Filtering** — `redistribute connected` has no route-map filter. Could leak unintended prefixes. Add prefix-list and route-map.
+
+10. **NTP Redundancy** — Only one NTP server configured. Best practice is minimum 3 sources for falseticker detection.
+
+11. **Logging / Syslog** — No syslog configuration. Add buffered logging and remote syslog server for PTP events, multicast state changes, and interface flaps.
+
+12. **SNMP** — No SNMP configured. Needed for monitoring PTP metrics, interface counters, multicast state.
+
+13. **Spanning-Tree** — No explicit STP mode or root priority. Should configure MSTP with defined root bridges to prevent L2 loops.
+
+14. **Storm Control on Access Ports** — No storm-control on media host ports. A broadcast storm could disrupt PTP and media flows.
+
+15. **AAA / TACACS+** — Only local authentication. Production should add centralized AAA with local fallback.
+
+16. **Login Banner** — No banner configured. Often a compliance requirement.
+
+17. **QoS / DSCP for ST2110** — No QoS policies defined. ST2110 requires traffic classification: PTP (DSCP 46/48), media essence (DSCP 34), metadata (DSCP 26).
+
+18. **IGMP Snooping / Fast-Leave** — Not explicitly configured on media VLANs. Enable fast-leave on single-host access ports for minimal multicast leave latency.
+
+19. **Control-Plane Policing (CoPP)** — No CoPP configured. Switch CPU vulnerable to excessive control-plane traffic.
+
+20. **LLDP Explicit Config** — EOS enables LLDP by default, but ST2110/NMOS environments benefit from explicit TLV and management address configuration.
+
+21. **PIM RP Redundancy** — Single RP per fabric on the single spine. When scaling to 2 spines, add Anycast RP.
+
+22. **PTP VLAN Gateway Redundancy** — VLAN 2222 has two SVI IPs but no VRRP/VARP. GMs lose connectivity if their specific PTP leaf fails.
+
+23. **sFlow Not Generating** — `sflow_settings` defined but no sFlow config appears in output. May need additional parameters or use `custom_structured_configuration_sflow`.
+
+24. **`build.yml` Deprecated `collections` Keyword** — The play-level `collections:` block is deprecated in ansible-core 2.16+. Roles are already FQCN-referenced, so remove it.
+
+### Nice-to-Have
+
+25. **FEC on High-Speed Interfaces** — No explicit error-correction encoding. Consider RS-FEC for 25G, CL91 for 100G to prevent interop issues.
+
+26. **errdisable Recovery** — No auto-recovery configured. Ports stuck in errdisable require manual intervention.
+
+27. **`ansible_python_interpreter: $(which python3)`** — Shell expansion may not work in all Ansible execution contexts (AWX/Tower). Use an explicit path.
+
+28. **virtualDCS.yml Plaintext Passwords** — Lab passwords in cleartext committed to repo.
+
 -- Don't change this section without asking, i need to keep thoughts about the demo.
 1/ Read the requirements.md file and do some planning

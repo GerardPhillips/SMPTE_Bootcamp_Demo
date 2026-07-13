@@ -1,18 +1,22 @@
 ---
 type: spine
 
+generate_cv_tags:
+  topology_hints: true
+  device_tags:
+    - name: Campus
+      value: DC1
+    - name: Campus-Pod
+      value: Pod1
+    - name: Role
+      value: Spine
+
 spine:
   defaults:
     platform: 7280CR3A-32S
     loopback_ipv4_pool: 10.0.0.0/24
     loopback_ipv4_offset: 50
     rack: Blue_Spines
-    structured_config:
-      metadata:
-        cv_tags:
-          device_tags:
-            - name: Role
-              value: Spine
 
   nodes:
     - name: blue-spine1
