@@ -204,7 +204,7 @@ ntp:
   vrf: default
 ptp:
   mode: boundary
-  clock_identity: 00:1C:73:14:00:01
+  clock_identity: 00:1C:73:14:01:01
   priority1: 20
   priority2: 1
   domain: 127

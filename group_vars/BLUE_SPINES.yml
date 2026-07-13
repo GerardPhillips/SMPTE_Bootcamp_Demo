@@ -23,3 +23,6 @@ spine:
       id: 1
       bgp_as: 65201
       mgmt_ip: 192.168.0.21/24
+      structured_config:
+        ptp:
+          clock_identity: "00:1C:73:14:01:01"

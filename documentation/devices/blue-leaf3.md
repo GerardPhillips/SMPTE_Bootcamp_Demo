@@ -107,13 +107,13 @@ ntp server 192.168.0.1 prefer
 
 | Clock ID | Source IP | Priority 1 | Priority 2 | TTL | Domain | Mode | Forward V1 | Forward Unicast | Free Running Enabled |
 | -------- | --------- | ---------- | ---------- | --- | ------ | ---- | ---------- | --------------- | -------------------- |
-| 00:1C:73:1e:00:03 | - | 30 | 3 | - | 127 | boundary | - | - | - |
+| 00:1C:73:1e:01:03 | - | 30 | 3 | - | 127 | boundary | - | - | - |
 
 #### PTP Device Configuration
 
 ```eos
 !
-ptp clock-identity 00:1C:73:1e:00:03
+ptp clock-identity 00:1C:73:1e:01:03
 ptp domain 127
 ptp mode boundary
 ptp priority1 30
