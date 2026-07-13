@@ -33,6 +33,26 @@ l3leaf:
                 value: Leaf
               - name: Access-Pod
                 value: Blue-Rack1
+        ethernet_interfaces:
+          - name: Ethernet1
+            description: Media-Host-Routed
+            shutdown: false
+            switchport:
+              enabled: false
+            ip_address: 10.10.201.0/31
+            pim:
+              ipv4:
+                sparse_mode: true
+            ptp:
+              enable: true
+              role: master
+              announce:
+                interval: 0
+                timeout: 3
+              delay_req: -3
+              sync_message:
+                interval: -3
+              transport: ipv4
 
     - name: blue-leaf2
       id: 2

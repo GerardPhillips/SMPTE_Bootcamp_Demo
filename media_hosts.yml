@@ -1,5 +1,25 @@
 ---
 - switches:
+    - red-leaf1
+  switch_ports:
+    - Ethernet2
+  description: Media-Host-L2
+  mode: access
+  vlans: 100
+  ptp:
+    enabled: true
+
+- switches:
+    - blue-leaf1
+  switch_ports:
+    - Ethernet2
+  description: Media-Host-L2
+  mode: access
+  vlans: 200
+  ptp:
+    enabled: true
+
+- switches:
     - ptp-leaf-1
   switch_ports:
     - Ethernet48

@@ -16,9 +16,13 @@
 - [Internal VLAN Allocation Policy](#internal-vlan-allocation-policy)
   - [Internal VLAN Allocation Policy Summary](#internal-vlan-allocation-policy-summary)
   - [Internal VLAN Allocation Policy Device Configuration](#internal-vlan-allocation-policy-device-configuration)
+- [VLANs](#vlans)
+  - [VLANs Summary](#vlans-summary)
+  - [VLANs Device Configuration](#vlans-device-configuration)
 - [Interfaces](#interfaces)
   - [Ethernet Interfaces](#ethernet-interfaces)
   - [Loopback Interfaces](#loopback-interfaces)
+  - [VLAN Interfaces](#vlan-interfaces)
 - [Routing](#routing)
   - [Service Routing Protocols Model](#service-routing-protocols-model)
   - [IP Routing](#ip-routing)
@@ -208,6 +212,22 @@ daemon TerminAttr
 vlan internal order ascending range 1006 1199
 ```
 
+## VLANs
+
+### VLANs Summary
+
+| VLAN ID | Name | Trunk Groups |
+| ------- | ---- | ------------ |
+| 200 | Blue-Media | - |
+
+### VLANs Device Configuration
+
+```eos
+!
+vlan 200
+   name Blue-Media
+```
+
 ## Interfaces
 
 ### Ethernet Interfaces
@@ -218,6 +238,7 @@ vlan internal order ascending range 1006 1199
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
+| Ethernet2 | Media-Host-L2 | access | 200 | - | - | - |
 
 *Inherited from Port-Channel Interface
 
@@ -225,11 +246,40 @@ vlan internal order ascending range 1006 1199
 
 | Interface | Description | Channel Group | IP Address | VRF | MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | --- | --- | -------- | ------ | ------- |
+| Ethernet1 | Media-Host-Routed | - | 10.10.201.0/31 | default | - | False | - | - |
 | Ethernet49/1 | P2P_blue-spine1_Ethernet1/1 | - | 10.0.0.193/31 | default | 9214 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
 ```eos
+!
+interface Ethernet1
+   description Media-Host-Routed
+   no shutdown
+   no switchport
+   ip address 10.10.201.0/31
+   pim ipv4 sparse-mode
+   ptp enable
+   ptp announce interval 0
+   ptp announce timeout 3
+   ptp delay-req interval -3
+   ptp role master
+   ptp sync-message interval -3
+   ptp transport ipv4
+!
+interface Ethernet2
+   description Media-Host-L2
+   no shutdown
+   switchport access vlan 200
+   switchport mode access
+   switchport
+   ptp enable
+   ptp announce interval 0
+   ptp announce timeout 3
+   ptp delay-req interval -3
+   ptp role master
+   ptp sync-message interval -3
+   ptp transport ipv4
 !
 interface Ethernet49/1
    description P2P_blue-spine1_Ethernet1/1
@@ -270,6 +320,30 @@ interface Loopback0
    description ROUTER_ID
    no shutdown
    ip address 10.0.0.61/32
+```
+
+### VLAN Interfaces
+
+#### VLAN Interfaces Summary
+
+| Interface | Description | VRF | MTU | Shutdown |
+| --------- | ----------- | --- | --- | -------- |
+| Vlan200 | Blue-Media | default | - | False |
+
+##### IPv4
+
+| Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
+| --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
+| Vlan200 | default | 10.10.200.1/24 | - | - | - | - |
+
+#### VLAN Interfaces Device Configuration
+
+```eos
+!
+interface Vlan200
+   description Blue-Media
+   no shutdown
+   ip address 10.10.200.1/24
 ```
 
 ## Routing
@@ -432,6 +506,7 @@ router pim sparse-mode
 
 | Interface Name | VRF Name | IP Version | Border Router | DR Priority | Local Interface | Neighbor Filter |
 | -------------- | -------- | ---------- | ------------- | ----------- | --------------- | --------------- |
+| Ethernet1 | - | IPv4 | - | - | - | - |
 | Ethernet49/1 | - | IPv4 | - | - | - | - |
 
 ## VRF Instances

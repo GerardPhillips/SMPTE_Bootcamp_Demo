@@ -287,24 +287,11 @@ static_routes:
   prefix: 0.0.0.0/0
   next_hop: 192.168.0.1
 transceiver_qsfp_default_mode_4x10: true
-vlan_interfaces:
-- name: Vlan2222
-  description: PTP-Vlan
-  shutdown: false
-  metadata:
-    tenants:
-    - FABRIC
 vlan_internal_order:
   allocation: ascending
   range:
     beginning: 1006
     ending: 1199
-vlans:
-- id: 2222
-  name: PTP-Vlan
-  metadata:
-    tenants:
-    - FABRIC
 vrfs:
 - name: default
   ip_routing: false

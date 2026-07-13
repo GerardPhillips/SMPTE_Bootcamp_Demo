@@ -77,13 +77,25 @@ Pure L2/L3 design with overlay_routing_protocol: none. Custom node types disable
 - Red RP: 10.0.0.1 (red-spine1), Blue RP: 10.0.0.51 (blue-spine1)
 
 ### Interface Mapping
-- Spines (7280CR3A-32S): Eth1-3 to fabric leafs, Eth4-5 to PTP leafs
-- Leafs (7280SR3-48YC8): Eth49 uplink to spine1
+- Spines (7280CR3A-32S): Eth1/1-3/1 to fabric leafs, Eth4/1-5/1 to PTP leafs
+- Leafs (7280SR3-48YC8): Eth49/1 uplink to spine1
 - PTP leafs (720XP-48Y6): Eth1-2 (25G) uplinks to spines, Eth46-47 peer links
 
+### Example Host Ports (on red-leaf1 and blue-leaf1, symmetric)
+- **Ethernet1 — Routed port (L3 host)**
+  - No switchport, /31 point-to-point IP
+  - PIM sparse-mode + PTP enabled (role master)
+  - red-leaf1: 10.10.101.0/31, blue-leaf1: 10.10.201.0/31
+- **Ethernet2 — Access switchport (L2 host)**
+  - VLAN 100 (Red-Media) / VLAN 200 (Blue-Media)
+  - PTP enabled (role master)
+  - SVI gateway: red-leaf1 Vlan100 10.10.100.1/24, blue-leaf1 Vlan200 10.10.200.1/24
+- Host configs defined via structured_config (routed) and media_hosts.yml (switchport)
+- Spines excluded from NETWORK_SERVICES to prevent VLAN leaking
+
 ### CVP Deployment
-- CVP address: 10.18.129.180
-- TerminAttr streaming to 10.18.129.180:9910
+- CVP address: 10.18.129.180 (external), 192.168.0.5 (internal/TerminAttr)
+- TerminAttr streaming to 192.168.0.5:9910
 - Token from cvaas_user_token file
 - Configlet naming: AVD-${hostname}
 

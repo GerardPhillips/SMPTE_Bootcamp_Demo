@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.patches import FancyBboxPatch
 
-fig, ax = plt.subplots(1, 1, figsize=(22, 16))
+fig, ax = plt.subplots(1, 1, figsize=(22, 18))
 ax.set_xlim(-1, 23)
-ax.set_ylim(-1, 17)
+ax.set_ylim(-2.5, 17)
 ax.set_aspect('equal')
 ax.axis('off')
 fig.patch.set_facecolor('#1a1a2e')
@@ -124,20 +124,40 @@ for lname, (lx, ly) in blue_leaf_positions.items():
     draw_link(ax, lx, ly + 0.45, blue_spine_x, spine_y - 0.45,
               color=COLORS['border_blue'], lw=1.0)
 
+# --- Host devices below leaf1s ---
+host_y = 4.5
+host_color = '#566573'
+
+# Red hosts
+draw_switch(ax, 1, host_y, 'L3 Host', 'Eth1 routed  10.10.101.1/31', host_color, width=2.2, height=0.7)
+draw_switch(ax, 3.2, host_y, 'L2 Host', 'Eth2 VLAN 100  10.10.100.x/24', host_color, width=2.2, height=0.7)
+draw_link(ax, 1, host_y + 0.35, 2, leaf_y - 0.45, color='#f39c12', lw=1.5)
+draw_link(ax, 3.2, host_y + 0.35, 2, leaf_y - 0.45, color='#f39c12', lw=1.5)
+ax.text(0.6, host_y + 0.55, 'PIM+PTP', ha='center', va='center', fontsize=5.5, color='#f39c12', family='monospace')
+ax.text(3.6, host_y + 0.55, 'PTP', ha='center', va='center', fontsize=5.5, color='#f39c12', family='monospace')
+
+# Blue hosts
+draw_switch(ax, 14, host_y, 'L3 Host', 'Eth1 routed  10.10.201.1/31', host_color, width=2.2, height=0.7)
+draw_switch(ax, 16.2, host_y, 'L2 Host', 'Eth2 VLAN 200  10.10.200.x/24', host_color, width=2.2, height=0.7)
+draw_link(ax, 14, host_y + 0.35, 15, leaf_y - 0.45, color='#f39c12', lw=1.5)
+draw_link(ax, 16.2, host_y + 0.35, 15, leaf_y - 0.45, color='#f39c12', lw=1.5)
+ax.text(13.6, host_y + 0.55, 'PIM+PTP', ha='center', va='center', fontsize=5.5, color='#f39c12', family='monospace')
+ax.text(16.6, host_y + 0.55, 'PTP', ha='center', va='center', fontsize=5.5, color='#f39c12', family='monospace')
+
 # --- Fabric boundary boxes ---
-red_box = FancyBboxPatch((0.5, 5.6), 8, 5.2, boxstyle="round,pad=0.3",
+red_box = FancyBboxPatch((0.5, 3.8), 8, 7.0, boxstyle="round,pad=0.3",
                           facecolor='none', edgecolor=COLORS['border_red'],
                           linewidth=2, linestyle='--', alpha=0.5)
 ax.add_patch(red_box)
-ax.text(4.5, 5.85, 'RED FABRIC', ha='center', va='center',
+ax.text(4.5, 4.05, 'RED FABRIC', ha='center', va='center',
         fontsize=10, fontweight='bold', color=COLORS['border_red'],
         family='sans-serif', alpha=0.7)
 
-blue_box = FancyBboxPatch((13.5, 5.6), 8, 5.2, boxstyle="round,pad=0.3",
+blue_box = FancyBboxPatch((13.5, 3.8), 8, 7.0, boxstyle="round,pad=0.3",
                            facecolor='none', edgecolor=COLORS['border_blue'],
                            linewidth=2, linestyle='--', alpha=0.5)
 ax.add_patch(blue_box)
-ax.text(17.5, 5.85, 'BLUE FABRIC', ha='center', va='center',
+ax.text(17.5, 4.05, 'BLUE FABRIC', ha='center', va='center',
         fontsize=10, fontweight='bold', color=COLORS['border_blue'],
         family='sans-serif', alpha=0.7)
 
@@ -158,12 +178,12 @@ info_items = [
     ('Mgmt:', '192.168.0.0/24  |  GW 192.168.0.1'),
     ('Red RP:', '10.0.0.1 (red-spine1)  |  Blue RP: 10.0.0.51 (blue-spine1)'),
 ]
-info_box = FancyBboxPatch((3, 0.3), 16, 3.7, boxstyle="round,pad=0.2",
+info_box = FancyBboxPatch((3, -2.0), 16, 3.7, boxstyle="round,pad=0.2",
                            facecolor='#16213e', edgecolor='#34495e',
                            linewidth=1.5, alpha=0.8)
 ax.add_patch(info_box)
 for i, (key, val) in enumerate(info_items):
-    ypos = 3.5 - i * 0.5
+    ypos = 1.2 - i * 0.5
     ax.text(4, ypos, key, ha='left', va='center', fontsize=8.5,
             fontweight='bold', color='#f39c12', family='monospace')
     ax.text(7.5, ypos, val, ha='left', va='center', fontsize=8.5,
@@ -177,10 +197,11 @@ legend_items = [
     (COLORS['blue_leaf'], 'Blue Leaf (7280SR3-48YC8)'),
     (COLORS['ptp'], 'PTP Distribution (720XP-48Y6)'),
     (COLORS['gm'], 'PTP Grandmaster'),
+    ('#566573', 'Media Host (example)'),
 ]
 for i, (color, label) in enumerate(legend_items):
     lx = 0.2
-    ly = 4.8 - i * 0.4
+    ly = 2.5 - i * 0.4
     ax.add_patch(FancyBboxPatch((lx, ly - 0.12), 0.3, 0.24,
                                  boxstyle="round,pad=0.02", facecolor=color,
                                  edgecolor='white', linewidth=0.5))

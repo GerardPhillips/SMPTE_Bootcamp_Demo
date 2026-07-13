@@ -42,6 +42,45 @@ ethernet_interfaces:
     peer_type: spine
   switchport:
     enabled: false
+- name: Ethernet2
+  description: Media-Host-L2
+  shutdown: false
+  ptp:
+    enable: true
+    announce:
+      interval: 0
+      timeout: 3
+    delay_req: -3
+    sync_message:
+      interval: -3
+    role: master
+    transport: ipv4
+  metadata:
+    peer_type: network_port
+    peer_key: network_ports
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 200
+- name: Ethernet1
+  description: Media-Host-Routed
+  shutdown: false
+  ip_address: 10.10.201.0/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  ptp:
+    enable: true
+    announce:
+      interval: 0
+      timeout: 3
+    delay_req: -3
+    sync_message:
+      interval: -3
+    role: master
+    transport: ipv4
+  switchport:
+    enabled: false
 event_monitor:
   enabled: true
 hostname: blue-leaf1
@@ -173,11 +212,25 @@ static_routes:
   prefix: 0.0.0.0/0
   next_hop: 192.168.0.1
 transceiver_qsfp_default_mode_4x10: true
+vlan_interfaces:
+- name: Vlan200
+  description: Blue-Media
+  shutdown: false
+  ip_address: 10.10.200.1/24
+  metadata:
+    tenants:
+    - FABRIC
 vlan_internal_order:
   allocation: ascending
   range:
     beginning: 1006
     ending: 1199
+vlans:
+- id: 200
+  name: Blue-Media
+  metadata:
+    tenants:
+    - FABRIC
 vrfs:
 - name: default
   ip_routing: false

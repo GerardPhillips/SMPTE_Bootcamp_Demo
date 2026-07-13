@@ -16,13 +16,9 @@
 - [Internal VLAN Allocation Policy](#internal-vlan-allocation-policy)
   - [Internal VLAN Allocation Policy Summary](#internal-vlan-allocation-policy-summary)
   - [Internal VLAN Allocation Policy Device Configuration](#internal-vlan-allocation-policy-device-configuration)
-- [VLANs](#vlans)
-  - [VLANs Summary](#vlans-summary)
-  - [VLANs Device Configuration](#vlans-device-configuration)
 - [Interfaces](#interfaces)
   - [Ethernet Interfaces](#ethernet-interfaces)
   - [Loopback Interfaces](#loopback-interfaces)
-  - [VLAN Interfaces](#vlan-interfaces)
 - [Routing](#routing)
   - [Service Routing Protocols Model](#service-routing-protocols-model)
   - [IP Routing](#ip-routing)
@@ -212,22 +208,6 @@ daemon TerminAttr
 vlan internal order ascending range 1006 1199
 ```
 
-## VLANs
-
-### VLANs Summary
-
-| VLAN ID | Name | Trunk Groups |
-| ------- | ---- | ------------ |
-| 2222 | PTP-Vlan | - |
-
-### VLANs Device Configuration
-
-```eos
-!
-vlan 2222
-   name PTP-Vlan
-```
-
 ## Interfaces
 
 ### Ethernet Interfaces
@@ -350,29 +330,6 @@ interface Loopback0
    description ROUTER_ID
    no shutdown
    ip address 10.0.0.51/32
-```
-
-### VLAN Interfaces
-
-#### VLAN Interfaces Summary
-
-| Interface | Description | VRF | MTU | Shutdown |
-| --------- | ----------- | --- | --- | -------- |
-| Vlan2222 | PTP-Vlan | default | - | False |
-
-##### IPv4
-
-| Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
-| --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
-| Vlan2222 | default | - | - | - | - | - |
-
-#### VLAN Interfaces Device Configuration
-
-```eos
-!
-interface Vlan2222
-   description PTP-Vlan
-   no shutdown
 ```
 
 ## Routing

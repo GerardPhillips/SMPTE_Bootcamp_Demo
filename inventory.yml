@@ -41,9 +41,7 @@ All:
                   ansible_host: 192.168.0.32
     NETWORK_SERVICES:
       children:
-        RED_SPINES:
         RED_LEAFS:
-        BLUE_SPINES:
         BLUE_LEAFS:
         PTP_LEAFS:
   vars:
