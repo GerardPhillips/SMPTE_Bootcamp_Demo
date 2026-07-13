@@ -1,0 +1,35 @@
+---
+type: ptpleaf
+
+ptpleaf:
+  defaults:
+    platform: 720XP-48Y6
+    loopback_ipv4_pool: 10.0.0.0/24
+    loopback_ipv4_offset: 80
+    uplink_ipv4_pool: 10.0.0.160/27
+    max_parallel_uplinks: 1
+    uplink_switches: [red-spine1, blue-spine1]
+    filter:
+      only_vlans_in_use: true
+    rack: PTP_Leaf
+    structured_config:
+      metadata:
+        cv_tags:
+          device_tags:
+            - name: Role
+              value: PTP-Distribution
+
+  nodes:
+    - name: ptp-leaf-1
+      id: 1
+      bgp_as: 65301
+      mgmt_ip: 192.168.0.31/24
+      uplink_interfaces: [Ethernet1, Ethernet2]
+      uplink_switch_interfaces: [Ethernet4/1, Ethernet4/1]
+
+    - name: ptp-leaf-2
+      id: 2
+      bgp_as: 65302
+      mgmt_ip: 192.168.0.32/24
+      uplink_interfaces: [Ethernet1, Ethernet2]
+      uplink_switch_interfaces: [Ethernet5/1, Ethernet5/1]

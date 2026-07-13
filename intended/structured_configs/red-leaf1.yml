@@ -1,0 +1,183 @@
+aaa_authorization:
+  exec:
+    default: local
+  commands:
+    all_default: local
+aaa_root:
+  disabled: true
+config_end: true
+daemon_terminattr:
+  cvaddrs:
+  - 192.168.0.5:9910
+  cvauth:
+    method: token
+    token_file: /tmp/token
+  cvsourceintf: Management1
+  cvvrf: default
+  disable_aaa: false
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+enable_password:
+  disabled: true
+ethernet_interfaces:
+- name: Ethernet49/1
+  description: P2P_red-spine1_Ethernet1/1
+  shutdown: false
+  mtu: 9214
+  ip_address: 10.0.0.129/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  ptp:
+    enable: true
+    announce:
+      interval: 0
+      timeout: 3
+    delay_req: -3
+    sync_message:
+      interval: -3
+    transport: ipv4
+  metadata:
+    peer: red-spine1
+    peer_interface: Ethernet1/1
+    peer_type: spine
+  switchport:
+    enabled: false
+event_monitor:
+  enabled: true
+hostname: red-leaf1
+ip_igmp_snooping:
+  globally_enabled: true
+ip_name_server:
+  vrfs:
+  - name: default
+    servers:
+    - ip_address: 169.254.169.254
+ip_routing: true
+load_interval:
+  default: 5
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$ttzoDdVO8Uz2SiBF$Ge.hQWy9wPGWyGc9.Q/mMyjycNO.9ylh40Vc.0iiqU/MtR7MKKIuOgbKkOeD3EpPMtN2SBForxog2ZCqv0kbu0
+- name: cvpadmin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$1Pc3ROtR8hgKWcLF$5Omj3zu099g/NlwhFAnH7xdB8qgr.oj6JQg47idGFLE1DLyyZzKJ02zD39OoDVxvr8WDnOElNziH24RDyJ43j1
+loopback_interfaces:
+- name: Loopback0
+  description: ROUTER_ID
+  shutdown: false
+  ip_address: 10.0.0.11/32
+management_interfaces:
+- name: Management1
+  description: oob_management_interface
+  shutdown: false
+  vrf: default
+  ip_address: 192.168.0.13/24
+  type: oob
+  gateway: 192.168.0.1
+metadata:
+  is_deployed: true
+  platform: 7280SR3-48YC8
+  rack: Red_Leaf
+  pod_name: Red
+  dc_name: SMPTE-Bootcamp
+  fabric_name: FABRIC
+  cv_tags:
+    device_tags:
+    - name: topology_hint_datacenter
+      value: SMPTE-Bootcamp
+    - name: topology_hint_fabric
+      value: FABRIC
+    - name: topology_hint_pod
+      value: Red
+    - name: topology_hint_type
+      value: leaf
+    - name: topology_hint_rack
+      value: Red_Leaf
+    - name: Campus
+      value: DC1
+    - name: Campus-Pod
+      value: Pod1
+    - name: Role
+      value: Leaf
+    - name: Access-Pod
+      value: Red-Rack1
+ntp:
+  local_interface:
+    name: Management1
+    vrf: default
+  servers:
+  - name: 192.168.0.1
+    preferred: true
+  vrf: default
+ptp:
+  mode: boundary
+  clock_identity: 00:1C:73:1e:00:01
+  priority1: 30
+  priority2: 1
+  domain: 127
+  monitor:
+    enabled: true
+    threshold:
+      offset_from_master: 250
+      mean_path_delay: 1500
+    missing_message:
+      sequence_ids:
+        enabled: true
+        announce: 3
+        delay_resp: 3
+        follow_up: 3
+        sync: 3
+router_bgp:
+  as: '65111'
+  router_id: 10.0.0.11
+  maximum_paths:
+    paths: 4
+  updates:
+    wait_install: true
+  bgp:
+    default:
+      ipv4_unicast: false
+  peer_groups:
+  - name: IPv4-UNDERLAY-PEERS
+    metadata:
+      type: ipv4
+    send_community: all
+    maximum_routes: 256000
+  neighbors:
+  - ip_address: 10.0.0.128
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65101'
+    metadata:
+      peer: red-spine1
+    description: red-spine1_Ethernet1/1
+  redistribute:
+    connected:
+      enabled: true
+  address_family_ipv4:
+    peer_groups:
+    - name: IPv4-UNDERLAY-PEERS
+      activate: true
+router_multicast:
+  ipv4:
+    routing: true
+router_pim_sparse_mode:
+  ipv4:
+    rp_addresses:
+    - address: 10.0.0.1
+service_routing_protocols_model: multi-agent
+static_routes:
+- vrf: default
+  prefix: 0.0.0.0/0
+  next_hop: 192.168.0.1
+transceiver_qsfp_default_mode_4x10: true
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+vrfs:
+- name: default
+  ip_routing: false

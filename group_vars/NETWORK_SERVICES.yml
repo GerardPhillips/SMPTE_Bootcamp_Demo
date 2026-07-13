@@ -1,0 +1,14 @@
+---
+tenants:
+  - name: FABRIC
+    vrfs:
+      - name: default
+        svis:
+          - id: 2222
+            name: PTP-Vlan
+            enabled: true
+            nodes:
+              - node: ptp-leaf-1
+                ip_address: 10.10.1.254/24
+              - node: ptp-leaf-2
+                ip_address: 10.10.1.253/24

@@ -1,0 +1,63 @@
+---
+type: l3leaf
+
+l3leaf:
+  defaults:
+    platform: 7280SR3-48YC8
+    loopback_ipv4_pool: 10.0.0.0/24
+    loopback_ipv4_offset: 10
+    uplink_ipv4_pool: 10.0.0.128/26
+    max_parallel_uplinks: 1
+    uplink_switches: [red-spine1]
+    filter:
+      only_vlans_in_use: true
+    rack: Red_Leaf
+    structured_config:
+      metadata:
+        cv_tags:
+          device_tags:
+            - name: Role
+              value: Leaf
+
+  nodes:
+    - name: red-leaf1
+      id: 1
+      bgp_as: 65111
+      mgmt_ip: 192.168.0.13/24
+      uplink_switch_interfaces: [Ethernet1/1]
+      structured_config:
+        metadata:
+          cv_tags:
+            device_tags:
+              - name: Role
+                value: Leaf
+              - name: Access-Pod
+                value: Red-Rack1
+
+    - name: red-leaf2
+      id: 2
+      bgp_as: 65112
+      mgmt_ip: 192.168.0.14/24
+      uplink_switch_interfaces: [Ethernet2/1]
+      structured_config:
+        metadata:
+          cv_tags:
+            device_tags:
+              - name: Role
+                value: Leaf
+              - name: Access-Pod
+                value: Red-Rack2
+
+    - name: red-leaf3
+      id: 3
+      bgp_as: 65113
+      mgmt_ip: 192.168.0.15/24
+      uplink_switch_interfaces: [Ethernet3/1]
+      structured_config:
+        metadata:
+          cv_tags:
+            device_tags:
+              - name: Role
+                value: Leaf
+              - name: Access-Pod
+                value: Red-Rack3

@@ -1,0 +1,24 @@
+---
+- switches:
+    - ptp-leaf-1
+  switch_ports:
+    - Ethernet48
+  description: PTP Grandmaster 1
+  speed: forced 1000full
+  mode: access
+  vlans: 2222
+  ptp:
+    enabled: true
+    endpoint_role: bmca
+
+- switches:
+    - ptp-leaf-2
+  switch_ports:
+    - Ethernet48
+  description: PTP Grandmaster 2
+  speed: forced 1000full
+  mode: access
+  vlans: 2222
+  ptp:
+    enabled: true
+    endpoint_role: bmca

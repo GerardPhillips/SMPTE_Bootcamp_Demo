@@ -1,0 +1,21 @@
+---
+type: spine
+
+spine:
+  defaults:
+    platform: 7280CR3A-32S
+    loopback_ipv4_pool: 10.0.0.0/24
+    loopback_ipv4_offset: 0
+    rack: Red_Spines
+    structured_config:
+      metadata:
+        cv_tags:
+          device_tags:
+            - name: Role
+              value: Spine
+
+  nodes:
+    - name: red-spine1
+      id: 1
+      bgp_as: 65101
+      mgmt_ip: 192.168.0.11/24

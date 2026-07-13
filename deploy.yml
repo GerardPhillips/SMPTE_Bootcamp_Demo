@@ -1,0 +1,16 @@
+---
+- name: Deploy Configuration to CVP
+  hosts: FABRIC
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Deploy configurations and tags to CloudVision
+      ansible.builtin.import_role:
+        name: arista.avd.cv_deploy
+  vars:
+    cv_submit_workspace: true
+    cv_submit_workspace_force: false
+    cv_configlet_name_template: "AVD-${hostname}"
+    cv_server: 10.18.129.180
+    cv_token: "{{ lookup('ansible.builtin.file', 'cvaas_user_token') }}"
+    cv_verify_certs: false

@@ -1,0 +1,60 @@
+---
+All:
+  children:
+    FABRIC:
+      children:
+        RED:
+          children:
+            RED_SPINES:
+              hosts:
+                red-spine1:
+                  ansible_host: 192.168.0.11
+            RED_LEAFS:
+              hosts:
+                red-leaf1:
+                  ansible_host: 192.168.0.13
+                red-leaf2:
+                  ansible_host: 192.168.0.14
+                red-leaf3:
+                  ansible_host: 192.168.0.15
+        BLUE:
+          children:
+            BLUE_SPINES:
+              hosts:
+                blue-spine1:
+                  ansible_host: 192.168.0.21
+            BLUE_LEAFS:
+              hosts:
+                blue-leaf1:
+                  ansible_host: 192.168.0.23
+                blue-leaf2:
+                  ansible_host: 192.168.0.24
+                blue-leaf3:
+                  ansible_host: 192.168.0.25
+        PTP:
+          children:
+            PTP_LEAFS:
+              hosts:
+                ptp-leaf-1:
+                  ansible_host: 192.168.0.31
+                ptp-leaf-2:
+                  ansible_host: 192.168.0.32
+    NETWORK_SERVICES:
+      children:
+        RED_SPINES:
+        RED_LEAFS:
+        BLUE_SPINES:
+        BLUE_LEAFS:
+        PTP_LEAFS:
+  vars:
+    ansible_python_interpreter: $(which python3)
+    ansible_network_os: eos
+    ansible_connection: httpapi
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+    ansible_httpapi_port: 443
+    ansible_user: admin
+    ansible_password: arista123!
+    ansible_become: true
+    ansible_become_method: enable
+    ansible_host_key_checking: false
