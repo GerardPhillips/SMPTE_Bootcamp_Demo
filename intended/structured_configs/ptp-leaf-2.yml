@@ -179,20 +179,16 @@ metadata:
   fabric_name: FABRIC
   cv_tags:
     device_tags:
-    - name: topology_hint_datacenter
-      value: SMPTE-Bootcamp
-    - name: topology_hint_fabric
-      value: FABRIC
-    - name: topology_hint_pod
-      value: PTP
-    - name: topology_hint_type
-      value: leaf
-    - name: topology_hint_rack
-      value: PTP_Leaf
     - name: Campus
       value: DC1
     - name: Campus-Pod
       value: Pod1
+    - name: topology_hint_datacenter
+      value: SMPTE-Bootcamp
+    - name: topology_hint_fabric
+      value: FABRIC
+    - name: topology_hint_type
+      value: superspine
     - name: Role
       value: PTP-Distribution
 ntp:

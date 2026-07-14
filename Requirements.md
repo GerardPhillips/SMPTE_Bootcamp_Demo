@@ -101,10 +101,11 @@ Pure L2/L3 design with overlay_routing_protocol: none. Custom node types disable
 
 ### CloudVision Tags
 - All devices: Campus=DC1, Campus-Pod=Pod1, dc=SMPTE-Bootcamp
-- Spines: Role=Spine
-- Leafs: Role=Leaf, Access-Pod=Red-Rack1/2/3 or Blue-Rack1/2/3
-- PTP leafs: Role=PTP-Distribution
-- Auto-generated topology hints: fabric, pod, type, rack
+- Spines: Role=Spine, topology_hint_type=spine
+- Leafs: Role=Leaf, Access-Pod=Red-Rack1/2/3 or Blue-Rack1/2/3, topology_hint_type=leaf
+- PTP leafs: Role=PTP-Distribution, topology_hint_type=superspine (renders above pods in CVaaS topology view)
+- PTP leafs have topology_hints disabled (no auto pod/rack tags) to float above Red/Blue pods
+- Auto-generated topology hints for all other devices: fabric, pod, type, rack
 
 ### Toolchain (already installed)
 - ansible-core 2.16.3, arista.avd 6.2.0, arista.cvp 3.10.1, Python 3.10.4

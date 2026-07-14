@@ -1,6 +1,20 @@
 ---
 type: ptpleaf
 
+generate_cv_tags:
+  topology_hints: false
+  device_tags:
+    - name: Campus
+      value: DC1
+    - name: Campus-Pod
+      value: Pod1
+    - name: topology_hint_datacenter
+      value: SMPTE-Bootcamp
+    - name: topology_hint_fabric
+      value: FABRIC
+    - name: topology_hint_type
+      value: superspine
+
 ptpleaf:
   defaults:
     platform: 720XP-48Y6
